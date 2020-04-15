@@ -4,17 +4,18 @@ import {createBrowserHistory} from "history";
 import {Redirect, Route, Router, Switch} from "react-router-dom";
 
 import AdminLayout from "layouts/Admin/Admin.jsx";
+import Login from "./views/Login";
 
 import "assets/scss/dashboard-react.scss";
 import "assets/css/nucleo-icons.css";
 
-const hist = createBrowserHistory();
 
 ReactDOM.render(
-    <Router history={hist}>
+    <Router history={createBrowserHistory()}>
         <Switch>
             <Route path="/admin" render={props => <AdminLayout {...props} />}/>
-            <Redirect from="/" to="/admin/dashboard"/>
+            <Route path="/login"><Login/></Route>
+            <Redirect from="/" to="/login"/>
         </Switch>
     </Router>,
     document.getElementById("root")

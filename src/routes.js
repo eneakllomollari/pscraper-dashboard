@@ -1,4 +1,5 @@
 import Dashboard from "views/Dashboard.jsx";
+import DynamicHistory from "views/DynamicHistory.jsx";
 import Map from "views/Map.jsx";
 
 const routes = [
@@ -16,5 +17,12 @@ const routes = [
         component: Map,
         layout: "/admin"
     },
+    {
+        path: "/dynamic-history",
+        name: "History",
+        icon: "tim-icons icon-notes",
+        component: DynamicHistory,
+        layout: "/admin"
+    }
 ];
 export default routes;

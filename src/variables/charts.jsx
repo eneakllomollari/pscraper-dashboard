@@ -1,8 +1,14 @@
-// ##############################
-// // // Chart variables
-// #############################
+const token = Buffer.from(`phevscraping:G6y5eiaXe8euyVC`, 'utf8').toString('base64')
+let vehicles_api = 'http://pscraper.herokuapp.com/pscraper/vehicle/'
+let sellers_api = 'http://pscraper.herokuapp.com/pscraper/seller/'
+let history_api = 'http://pscraper.herokuapp.com/pscraper/history/'
+let headers = {
+    headers: {
+        'Authorization': `Basic ${token}`
+    }
+}
 
-// chartExample1 and chartExample2 options
+
 let chart1_2_options = {
     maintainAspectRatio: false,
     legend: {
@@ -53,9 +59,6 @@ let chart1_2_options = {
     }
 };
 
-// #########################################
-// // // used inside src/views/Dashboard.jsx
-// #########################################
 let chartExample1 = {
     data1: canvas => {
         let ctx = canvas.getContext("2d");
@@ -195,9 +198,6 @@ let chartExample1 = {
     options: chart1_2_options
 };
 
-// #########################################
-// // // used inside src/views/Dashboard.jsx
-// #########################################
 let chartExample2 = {
     data: canvas => {
         let ctx = canvas.getContext("2d");
@@ -234,9 +234,6 @@ let chartExample2 = {
     options: chart1_2_options
 };
 
-// #########################################
-// // // used inside src/views/Dashboard.jsx
-// #########################################
 let chartExample3 = {
     data: canvas => {
         let ctx = canvas.getContext("2d");
@@ -313,9 +310,6 @@ let chartExample3 = {
     }
 };
 
-// #########################################
-// // // used inside src/views/Dashboard.jsx
-// #########################################
 const chartExample4 = {
     data: canvas => {
         let ctx = canvas.getContext("2d");
@@ -402,4 +396,14 @@ const chartExample4 = {
     }
 };
 
-module.exports = {chartExample1, chartExample2, chartExample3, chartExample4};
+
+export {
+    headers,
+    vehicles_api,
+    history_api,
+    sellers_api,
+    chartExample1,
+    chartExample2,
+    chartExample3,
+    chartExample4,
+}
