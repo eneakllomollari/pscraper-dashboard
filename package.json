@@ -1,47 +1,51 @@
 {
-    "name": "pscraper",
-    "version": "1.0.0",
-    "private": true,
-    "homepage": "https://phev.ucdavis.edu/",
-    "dependencies": {
-        "@types/react": "16.4.16",
-        "ajv": "^6.12.0",
-        "axios": "^0.19.2",
-        "bootstrap": "^4.4.1",
-        "chart.js": "^2.7.2",
-        "classnames": "2.2.6",
-        "clean": "^4.0.2",
-        "eslint-plugin-flowtype": "^4.7.0",
-        "history": "4.7.2",
-        "jquery": "^3.5.0",
-        "node-sass": "^4.13.1",
-        "perfect-scrollbar": "1.4.0",
-        "prop-types": "^15.6.2",
-        "react": "next",
-        "react-chartjs-2": "^2.7.4",
-        "react-dom": "next",
-        "react-google-maps": "9.4.5",
-        "react-notification-alert": "0.0.8",
-        "react-router-dom": "4.3.1",
-        "react-scripts": "^3.4.0",
-        "react-spinners": "^0.8.1",
-        "reactstrap": "^7.1.0"
-    },
-    "scripts": {
-        "start": "react-scripts start",
-        "build": "react-scripts build",
-        "test": "react-scripts test --env=jsdom",
-        "eject": "react-scripts eject",
-        "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install && npm start",
-        "compile-scss": "node-sass src/assets/scss/dashboard-react.scss src/assets/css/dashboard-react.css"
-    },
-    "eslintConfig": {
-        "extends": "react-app"
-    },
-    "browserslist": [
-        ">0.2%",
-        "not dead",
-        "not ie <= 11",
-        "not op_mini all"
-    ]
+  "name": "pscraper",
+  "version": "1.0.0",
+  "private": true,
+  "homepage": "https://phev.ucdavis.edu/",
+  "dependencies": {
+    "@types/react": "16.4.16",
+    "ajv": "^6.12.0",
+    "axios": "^0.19.2",
+    "bootstrap": "^4.4.1",
+    "chart.js": "^2.7.2",
+    "classnames": "2.2.6",
+    "clean": "^4.0.2",
+    "eslint-plugin-flowtype": "^4.7.0",
+    "history": "4.7.2",
+    "jquery": "^3.5.0",
+    "node-sass": "^4.13.1",
+    "perfect-scrollbar": "1.4.0",
+    "prop-types": "^15.6.2",
+    "react": "next",
+    "react-chartjs-2": "^2.7.4",
+    "react-dom": "next",
+    "react-notification-alert": "0.0.8",
+    "react-openlayers": "^0.3.0",
+    "react-router-dom": "4.3.1",
+    "react-scripts": "^3.4.0",
+    "react-spinners": "^0.8.1",
+    "reactstrap": "^7.1.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install && npm start",
+    "compile-scss": "node-sass src/assets/scss/dashboard-react.scss src/assets/css/dashboard-react.css"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "devDependencies": {
+    "css-loader": "^3.5.3",
+    "style-loader": "^1.2.1"
+  }
 }

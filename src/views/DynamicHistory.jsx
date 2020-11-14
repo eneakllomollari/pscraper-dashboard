@@ -20,7 +20,7 @@ class DynamicHistory extends React.Component {
 
     render() {
         return (<div className="content">
-            {typeof this.state.history === 'string' ?
+            {this.state.history === '' ?
                 <CircleLoader
                     css={css`margin: 10% auto;`}
                     size={300}

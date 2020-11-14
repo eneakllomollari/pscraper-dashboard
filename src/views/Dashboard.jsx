@@ -1,11 +1,10 @@
 import React from "react";
-import { Bar, Line } from "react-chartjs-2";
-import { Card, CardBody, CardHeader, CardTitle, Col, Row, Table } from "reactstrap";
-import { chartExample2, chartExample4 } from "variables/charts.jsx";
+import {Card, CardBody, CardHeader, CardTitle, Col, Row, Table} from "reactstrap";
+import {DurationChart, PriceChart} from "variables/charts.jsx";
 import axios from "axios";
-import { headers, vehicles_api } from "variables/charts";
-import { BeatLoader } from "react-spinners";
-import { css } from "@emotion/core";
+import {headers, makes_api, vehicle_stats_api, vehicles_paginate_api} from "variables/charts";
+import {BeatLoader} from "react-spinners";
+import {css} from "@emotion/core";
 
 class Dashboard extends React.Component {
     constructor(props) {
@@ -14,107 +13,113 @@ class Dashboard extends React.Component {
             bigChartData: "data1",
             visible: true,
             vehicles: '',
+            makes: '',
+            all_stats: '',
+            makes_stats: '',
         };
     }
 
     componentDidMount() {
-        axios.get(vehicles_api, headers).then(resp => {
+        axios.get(vehicles_paginate_api, headers).then(resp => {
             const vehicles = resp.data;
             this.setState({ vehicles });
         })
+        axios.get(vehicle_stats_api, headers).then(resp => {
+            const all_stats = resp.data
+            this.setState({all_stats})
+        })
+        axios.get(makes_api, headers).then(resp => {
+            const makes = resp.data;
+            const makes_stats = makes.map(make => axios.get(vehicle_stats_api + `?make=${make}`, headers).then(resp => {
+                return resp.data;
+            }))
+            Promise.all(makes_stats).then((makes_stats) => {
+                    this.setState({makes_stats})
+                }
+            )
+            this.setState({makes});
+        })
     }
-
-    onToggle = () => {
-        this.setState({ visible: !this.state.visible });
-    };
 
     render() {
         return (
             <div className="content">
-                <Row>
-                    <Col lg="12">
-                        <Card className="card-chart">
-                            <CardHeader>
-                                <h5 className="card-category">Total Vehicles</h5>
-                                <CardTitle tag="h3">
-                                    <i className="tim-icons icon-bell-55 text-info" />{" "}
-                                    999,999
-                                </CardTitle>
-                            </CardHeader>
-                            <CardBody>
-                                <div className="chart-area">
-                                    <Line
-                                        data={chartExample2.data}
-                                        options={chartExample2.options}
-                                    />
-                                </div>
-                            </CardBody>
-                        </Card>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col lg="4">
-                        <Card className="card-chart">
-                            <CardHeader>
-                                <h5 className="card-category">Total Vehicles</h5>
-                                <CardTitle tag="h3">
-                                    <i className="tim-icons icon-bell-55 text-info" />{" "}
-                                    999,999
-                                </CardTitle>
-                            </CardHeader>
-                            <CardBody>
-                                <div className="chart-area">
-                                    <Line
-                                        data={chartExample2.data}
-                                        options={chartExample2.options}
-                                    />
-                                </div>
-                            </CardBody>
-                        </Card>
-                    </Col>
-                    <Col lg="4">
-                        <Card className="card-chart">
-                            <CardHeader>
-                                <h5 className="card-category">Completed Sales</h5>
-                                <CardTitle tag="h3">
-                                    <i className="tim-icons icon-send text-success" /> 9,999
-                                </CardTitle>
-                            </CardHeader>
-                            <CardBody>
-                                <div className="chart-area">
-                                    <Bar
-                                        data={chartExample4.data}
-                                        options={chartExample4.options}
-                                    />
-                                </div>
-                            </CardBody>
-                        </Card>
-                    </Col>
-                    <Col lg="4">
-                        <Card className="card-chart">
-                            <CardHeader>
-                                <h5 className="card-category">Completed Sales</h5>
-                                <CardTitle tag="h3">
-                                    <i className="tim-icons icon-send text-success" /> 9,999
-                                </CardTitle>
-                            </CardHeader>
-                            <CardBody>
-                                <div className="chart-area">
-                                    <Line
-                                        data={chartExample4.data}
-                                        options={chartExample4.options}
-                                    />
-                                </div>
-                            </CardBody>
-                        </Card>
-                    </Col>
-                </Row>
+                <Col>
+                    <Row>
+                        <Col lg="7" md="7">
+                            {
+                                this.state.makes === '' || this.state.makes_stats === '' || this.state.all_stats === '' ?
+                                    <BeatLoader
+                                        css={css`margin: 5% auto;text-align:center;`}
+                                        size={30}
+                                        color="blue"
+                                    /> : <Card className="card-chart">
+                                        <CardHeader>
+                                            <h5 className="card-category">Duration</h5>
+                                            <CardTitle tag="h3">
+                                                {Math.round(this.state.all_stats.duration.average).toLocaleString()} days
+                                            </CardTitle>
+                                        </CardHeader>
+                                        <CardBody>
+                                            <div className="chart-area">
+                                                <DurationChart makes={this.state.makes} stats={this.state.makes_stats}/>
+                                            </div>
+                                        </CardBody>
+                                    </Card>
+                            }
+                        </Col>
+                        <Col>
+                            <Card>
+                                <CardHeader>
+                                    Header
+                                </CardHeader>
+                                <CardBody>
+                                    Body
+                                </CardBody>
+                            </Card>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col lg="7" md="7">
+                            {
+                                this.state.makes === '' || this.state.makes_stats === '' ? <BeatLoader
+                                        css={css`margin: 5% auto;text-align:center;`}
+                                        size={30}
+                                        color="blue"
+                                    /> :
+                                    <Card className="card-chart">
+                                        <CardHeader>
+                                            <h5 className="card-category">Price</h5>
+                                            <CardTitle tag="h3">
+                                                ${Math.round(this.state.all_stats.price.average).toLocaleString()}
+                                            </CardTitle>
+                                        </CardHeader>
+                                        <CardBody>
+                                            <div className="chart-area">
+                                                <PriceChart makes={this.state.makes} stats={this.state.makes_stats}/>
+                                            </div>
+                                        </CardBody>
+                                    </Card>
+                            }
+                        </Col>
+                        <Col>
+                            <Card>
+                                <CardHeader>
+                                    Header
+                                </CardHeader>
+                                <CardBody>
+                                    Body
+                                </CardBody>
+                            </Card>
+                        </Col>
+                    </Row>
+                </Col>
                 <Row>
                     {typeof this.state.vehicles === 'string' ?
                         <BeatLoader
                             css={css`margin: 5% auto;`}
                             size={30}
-                            color="#123abc"
+                            color="blue"
                         /> :
                         <Col lg="12" md="12">
                             <Card>
@@ -122,6 +127,21 @@ class Dashboard extends React.Component {
                                 <CardBody>
                                     <Table responsive hover>
                                         <thead className="text-primary">
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">VIN</th>
+                                            <th scope="col">Make</th>
+                                            <th scope="col">Model</th>
+                                            <th scope="col">Year</th>
+                                            <th scope="col">Body Style</th>
+                                            <th scope="col">Mileage</th>
+                                            <th scope="col">Price</th>
+                                            <th scope="col">First Date</th>
+                                            <th scope="col">Duration</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {this.state.vehicles.results.map(vehicle =>
                                             <tr>
                                                 <th scope="col">#</th>
                                                 <th scope="col">VIN</th>
@@ -154,7 +174,8 @@ class Dashboard extends React.Component {
                                     </Table>
                                 </CardBody>
                             </Card>
-                        </Col>}
+                        </Col>
+                    }
                 </Row>
             </div>
         );
