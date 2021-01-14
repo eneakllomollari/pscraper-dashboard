@@ -1,5 +1,5 @@
-import React, {useState} from "react";
-import {Form, FormGroup, Input, Label} from "reactstrap";
+import React, { useState } from "react";
+import { Form, FormGroup, Input, Label } from "reactstrap";
 import "./Login.css"
 
 export default function Login() {
@@ -18,7 +18,7 @@ export default function Login() {
         <div className="content login">
             <Form onSubmit={handleSubmit}>
                 <div className="prompt">Login to pscraper</div>
-                <br/>
+                <br />
                 <FormGroup controlId="email" bsSize="large">
                     <Label>Username</Label>
                     <Input
@@ -37,7 +37,7 @@ export default function Login() {
                     />
                 </FormGroup>
                 <button type="submit" className="btn btn-primary animation-on-hover"
-                        disabled={!validateForm()}>
+                    disabled={!validateForm()}>
                     Login
                 </button>
                 <button type="button" className="btn animation-on-hover" disabled>

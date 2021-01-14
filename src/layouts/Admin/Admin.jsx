@@ -1,5 +1,5 @@
 import React from "react";
-import {Route, Switch} from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import PerfectScrollbar from "perfect-scrollbar";
 import AdminNavbar from "components/AdminNavbar/AdminNavbar.jsx";
 import Footer from "components/Footer/Footer.jsx";
@@ -26,7 +26,7 @@ class Admin extends React.Component {
         if (navigator.platform.indexOf("Win") > -1) {
             document.documentElement.className += " perfect-scrollbar-on";
             document.documentElement.classList.remove("perfect-scrollbar-off");
-            ps = new PerfectScrollbar(this.refs.mainPanel, {suppressScrollX: true});
+            ps = new PerfectScrollbar(this.refs.mainPanel, { suppressScrollX: true });
             let tables = document.querySelectorAll(".table-responsive");
             for (let i = 0; i < tables.length; i++) {
                 ps = new PerfectScrollbar(tables[i]);
@@ -58,7 +58,7 @@ class Admin extends React.Component {
 
     toggleSidebar = () => {
         document.documentElement.classList.toggle("nav-open");
-        this.setState({sidebarOpened: !this.state.sidebarOpened});
+        this.setState({ sidebarOpened: !this.state.sidebarOpened });
     };
 
     getRoutes = routes => {
@@ -78,7 +78,7 @@ class Admin extends React.Component {
     };
 
     handleBgClick = color => {
-        this.setState({backgroundColor: color});
+        this.setState({ backgroundColor: color });
     };
 
     getBrandText = path => {
@@ -122,7 +122,7 @@ class Admin extends React.Component {
                         <Switch>{this.getRoutes(routes)}</Switch>
                         {// we don't want the Footer to be rendered on map page
                             this.props.location.pathname.indexOf("maps") !== -1 ? null : (
-                                <Footer fluid/>
+                                <Footer fluid />
                             )}
                     </div>
                 </div>

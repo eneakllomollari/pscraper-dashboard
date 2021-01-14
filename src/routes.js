@@ -2,8 +2,7 @@ import Dashboard from "views/Dashboard.jsx";
 import DynamicHistory from "views/DynamicHistory.jsx";
 import Map from "views/Map.jsx";
 
-const routes = [
-    {
+const routes = [{
         path: "/dashboard",
         name: "Dashboard",
         icon: "tim-icons icon-chart-pie-36",
