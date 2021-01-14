@@ -7,15 +7,6 @@ import {Nav} from "reactstrap";
 let ps;
 
 class Sidebar extends React.Component {
-    constructor(props) {
-        super(props);
-        this.activeRoute.bind(this);
-    }
-
-    activeRoute(routeName) {
-        return this.props.location.pathname.indexOf(routeName) > -1 ? "active" : "";
-    }
-
     componentDidMount() {
         if (navigator.platform.indexOf("Win") > -1) {
             ps = new PerfectScrollbar(this.refs.sidebar, {
@@ -49,13 +40,6 @@ class Sidebar extends React.Component {
                         {routes.map((prop, key) => {
                             if (prop.redirect) return null;
                             return (
-                                <li
-                                    className={
-                                        this.activeRoute(prop.path) +
-                                        (prop.pro ? " active-pro" : "")
-                                    }
-                                    key={key}
-                                >
                                     <NavLink
                                         to={prop.layout + prop.path}
                                         className="nav-link"
@@ -66,7 +50,6 @@ class Sidebar extends React.Component {
                                         <i className={prop.icon}></i>
                                       <p>{prop.name}</p>
                                     </NavLink>
-                                </li>
                             );
                         })}
                     </Nav>

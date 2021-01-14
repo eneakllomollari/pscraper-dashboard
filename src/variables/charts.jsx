@@ -1,15 +1,17 @@
 import React from 'react';
 import {Line} from "react-chartjs-2";
 
-let vehicles_paginate_api = 'http://localhost:8000/api/v1/vehicle-paginate/'
-let sellers_paginate_api = 'http://localhost:8000/api/v1/seller-paginate/'
-let history_paginate_api = 'http://localhost:8000/api/v1/history-paginate/'
-let vehicles_api = 'http://localhost:8000/api/v1/vehicle/'
-let sellers_api = 'http://localhost:8000/api/v1/seller/'
-let history_api = 'http://localhost:8000/api/v1/history/'
-let makes_api = 'http://localhost:8000/api/v1/makes/'
-let vehicle_stats_api = 'http://localhost:8000/api/v1/vehicle-stats/'
-let headers = {headers: {'Authorization': 'Token 09e954ac499b7d38c53f8a306c3093fff3926c3d'}}
+let HOST = 'https://pscraper.herokuapp.com/api/v1'
+
+let vehicles_paginate_api = `${HOST}/vehicle-paginate/`
+let sellers_paginate_api = `${HOST}/seller-paginate/`
+let history_paginate_api = `${HOST}/history-paginate/`
+let vehicles_api = `${HOST}/vehicle/`
+let makes_api = `${HOST}/cars-com-makes/`
+let vehicle_stats_api = `${HOST}/cars-com-vehicle-stats/`
+
+let headers = {headers: {'Authorization': `Token ${process.env.REACT_APP_API_KEY}`}}
+
 
 function DurationChart(props) {
     return <div>
@@ -41,7 +43,7 @@ function DurationChart(props) {
                                 pointHoverRadius: 4,
                                 pointHoverBorderWidth: 15,
                                 pointRadius: 4,
-                                data: props.stats.map(stat=> stat.duration.average)
+                                data: props.stats.map(stat => stat.duration.average)
                             },
                             {
                                 label: "Standard Deviation",
@@ -58,7 +60,7 @@ function DurationChart(props) {
                                 pointHoverRadius: 4,
                                 pointHoverBorderWidth: 15,
                                 pointRadius: 4,
-                                data: props.stats.map(stat=>stat.duration.standard_deviation)
+                                data: props.stats.map(stat => stat.duration.standard_deviation)
                             },
                             {
                                 label: "Variance",
@@ -75,7 +77,7 @@ function DurationChart(props) {
                                 pointHoverRadius: 4,
                                 pointHoverBorderWidth: 15,
                                 pointRadius: 4,
-                                data: props.stats.map(stat=>stat.duration.variance)
+                                data: props.stats.map(stat => stat.duration.variance)
                             },
                         ]
                     };
@@ -116,7 +118,7 @@ function PriceChart(props) {
                                 pointHoverRadius: 4,
                                 pointHoverBorderWidth: 15,
                                 pointRadius: 4,
-                                data: props.stats.map(stat=> stat.price.average)
+                                data: props.stats.map(stat => stat.price.average)
                             },
                             {
                                 label: "Standard Deviation",
@@ -133,7 +135,7 @@ function PriceChart(props) {
                                 pointHoverRadius: 4,
                                 pointHoverBorderWidth: 15,
                                 pointRadius: 4,
-                                data: props.stats.map(stat=>stat.price.standard_deviation)
+                                data: props.stats.map(stat => stat.price.standard_deviation)
                             },
                             {
                                 label: "Variance",
@@ -150,7 +152,7 @@ function PriceChart(props) {
                                 pointHoverRadius: 4,
                                 pointHoverBorderWidth: 15,
                                 pointRadius: 4,
-                                data: props.stats.map(stat=>stat.price.variance)
+                                data: props.stats.map(stat => stat.price.variance)
                             },
                         ]
                     };
@@ -176,20 +178,20 @@ let chart1_2_options = {
     },
     scales: {
         yAxes: [{
-                display: false,
-            }],
+            display: false,
+        }],
         xAxes: [{
-                barPercentage: 1.6,
-                gridLines: {
-                    drawBorder: false,
-                    color: "rgba(29,140,248,0.1)",
-                    zeroLineColor: "transparent"
-                },
-                ticks: {
-                    padding: 20,
-                    fontColor: "#9a9a9a"
-                }
-            }]
+            barPercentage: 1.6,
+            gridLines: {
+                drawBorder: false,
+                color: "rgba(29,140,248,0.1)",
+                zeroLineColor: "transparent"
+            },
+            ticks: {
+                padding: 20,
+                fontColor: "#9a9a9a"
+            }
+        }]
     }
 };
 
@@ -201,6 +203,6 @@ export {
     vehicles_paginate_api,
     headers,
     vehicles_api,
-    history_api,
-    sellers_api,
+    sellers_paginate_api,
+    history_paginate_api,
 }

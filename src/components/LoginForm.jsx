@@ -1,12 +1,12 @@
 import React from "react";
 import "../assets/css/Login.css"
-import {Button, Form, FormGroup, Input, Label} from "reactstrap"
+import { Button, Form, FormGroup, Input, Label } from "reactstrap"
 import PropTypes from 'prop-types';
 import axios from "axios";
 
-class LoginForm extends React.Component {
-    constructor() {
-        super();
+export default class LoginForm extends React.Component {
+    constructor(props) {
+        super(props);
         this.state = {
             username: '',
             password: '',
@@ -17,23 +17,23 @@ class LoginForm extends React.Component {
         const name = e.target.name;
         const value = e.target.value;
         this.setState(prevState => {
-            const newSate = {...prevState};
-            newSate[name] = value;
-            return newSate;
+            const newState = { ...prevState };
+            newState[name] = value;
+            return newState;
         })
     }
 
     handleLogin = (e) => {
         e.preventDefault();
-        axios.post('http://localhost:8000/api/auth/token/login',
-            {
-                username: this.state.username,
-                password: this.state.password,
-            }).then(resp => {
+        axios.post('https://localhost:8000/api/auth/token/login', {
+            username: this.state.username,
+            password: this.state.password,
+        }).then(resp => {
             localStorage.setItem('token', resp.data.auth_token);
+            localStorage.setItem('username', this.state.username);
             this.setState({
-                logged_in: true,
-                displayed_form: '',
+                loggedIn: true,
+                displayedForm: '',
             });
         }).catch(err => {
             alert(err.response.data.non_field_errors)
@@ -64,13 +64,9 @@ class LoginForm extends React.Component {
                             onChange={this.handleChange}
                         />
                     </FormGroup>
-                    <Button color="success" className="btn animation-on-hover" onClick={this.handleLogin}
-                            disabled={!(this.state.username.length > 0 && this.state.password.length > 0)}>
-                        Sign In&nbsp;&nbsp;<i className="fas fa-sign-in-alt"></i>
-                    </Button>
-                    <Button color="info" className="btn animation-on-hover">
-                        Register&nbsp;&nbsp;
-                        <i className="fas fa-user-plus"></i>
+                    <Button color="success" className="btn animation-on-hover" onCLick={this.handleLogin}
+                        disabled={!(this.state.username.length > 0 && this.state.password.length > 0)}>
+                        Sign In&nbsp;&nbsp;<i className="fas fa-sign-in-alt"/>
                     </Button>
                 </Form>
             </div>
@@ -78,7 +74,6 @@ class LoginForm extends React.Component {
     }
 }
 
-export default LoginForm
 LoginForm.propTypes = {
     handleLogin: PropTypes.func.isRequired
 };

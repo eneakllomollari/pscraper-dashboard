@@ -1,24 +1,37 @@
 import React from "react";
-import {Card, CardBody, CardHeader, Col, Row, Table} from "reactstrap"
-import {headers, sellers_api} from "variables/charts.jsx"
+import {headers, sellers_paginate_api} from "variables/charts.jsx"
 import axios from "axios";
-import { css } from "@emotion/core";
-import { MoonLoader } from "react-spinners"
+import {Card, CardBody, CardFooter, CardHeader, Col, Row, Table} from "reactstrap";
+import {css} from "@emotion/core";
+import {MoonLoader} from "react-spinners"
+import ReactPaginate from 'react-paginate';
+
 
 export default class MyMap extends React.Component {
-    constructor() {
-        super();
-        this.state = { selectedSeller: false, sellers: '' }
+    constructor(props) {
+        super(props);
+        this.state = {
+            perPage: 100,
+            pageCount: '',
+            sellers: '',
+            next: '',
+            prev: '',
+        }
     }
 
-    handleClick = (seller) => {
-        this.setState({selectedSeller: seller})
-    };
+    handlePageChange = (data) => {
+        const url = `${sellers_paginate_api}?limit=${this.state.perPage}&offset=${data.selected * this.state.perPage}`
+        axios.get(url, headers).then(resp => {
+            const sellers = resp.data.results;
+            this.setState({sellers});
+        })
+    }
 
     componentDidMount() {
-        axios.get(sellers_api, headers).then(resp => {
-            const sellers = resp.data;
-            this.setState({ sellers });
+        axios.get(sellers_paginate_api, headers).then(resp => {
+            const sellers = resp.data.results;
+            const pageCount = Math.ceil(resp.data.count / this.state.perPage)
+            this.setState({sellers, pageCount});
         })
     }
 
@@ -42,25 +55,29 @@ export default class MyMap extends React.Component {
                                     </CardBody>
                                 </Card>
                             </Col>
-                            <Col>
-                                <Card>
-                                    <CardHeader>
-                                        Header Here
-                                    </CardHeader>
-                                    <CardBody>
-                                        Body Here
-                                    </CardBody>
-                                </Card>
-                            </Col>
                         </Row>
                         <Row>
                             <Col>
                                 <Card>
                                     <CardHeader>Dealers Table</CardHeader>
+                                    <CardFooter>
+                                        <ReactPaginate
+                                            previousLabel={'Prev'}
+                                            nextLabel={'Next'}
+                                            breakLabel={'...'}
+                                            pageCount={this.state.pageCount}
+                                            onPageChange={this.handlePageChange}
+                                            containerClassName={'pagination pointerMouse'}
+                                            subContainerClassName={'pagination'}
+                                            nextLinkClassName={'pointerMouse'}
+                                            prevLinkClassName={'pointerMouse'}
+                                        />
+                                    </CardFooter>
                                     <CardBody>
                                         <Table className="tablesorter table" responsive hover>
                                             <thead className="text-primary">
                                             <tr>
+                                                <th>#</th>
                                                 <th>Dealer</th>
                                                 <th>Phone Number</th>
                                                 <th>Address</th>
@@ -70,6 +87,7 @@ export default class MyMap extends React.Component {
                                             {
                                                 this.state.sellers.map(seller =>
                                                     <tr>
+                                                        <td>{seller.id}</td>
                                                         <td>{seller.name}</td>
                                                         <td>{seller.phone_number} </td>
                                                         <td>{seller.address} </td>
@@ -79,6 +97,19 @@ export default class MyMap extends React.Component {
                                             </tbody>
                                         </Table>
                                     </CardBody>
+                                    <CardFooter>
+                                        <ReactPaginate
+                                            previousLabel={'Prev'}
+                                            nextLabel={'Next'}
+                                            breakLabel={'...'}
+                                            pageCount={this.state.pageCount}
+                                            onPageChange={this.handlePageChange}
+                                            containerClassName={'pagination pointerMouse'}
+                                            subContainerClassName={'pagination'}
+                                            nextLinkClassName={'pointerMouse'}
+                                            prevLinkClassName={'pointerMouse'}
+                                        />
+                                    </CardFooter>
                                 </Card>
                             </Col>
                         </Row>

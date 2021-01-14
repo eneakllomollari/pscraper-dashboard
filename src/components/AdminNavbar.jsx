@@ -10,10 +10,10 @@ import {
     Modal,
     Nav,
     Navbar,
-    NavbarBrand,
     NavLink,
     UncontrolledDropdown
 } from "reactstrap";
+import { withRouter } from 'react-router-dom';
 
 class AdminNavbar extends React.Component {
     constructor(props) {
@@ -48,6 +48,10 @@ class AdminNavbar extends React.Component {
         }
     };
 
+    handleLogout = () => {
+        localStorage.removeItem('token');
+    }
+
     updateColor = () => {
         if (window.innerWidth < 993 && this.state.collapseOpen) {
             this.setState({
@@ -66,20 +70,17 @@ class AdminNavbar extends React.Component {
                 <Navbar className={classNames("navbar-absolute", this.state.color)} expand="lg">
                     <Container fluid>
                         <div className="navbar-wrapper">
-                            <div className={classNames("navbar-toggle d-inline", {toggled: this.props.sidebarOpened})}>
+                            <div className={classNames("navbar-toggle d-inline", { toggled: this.props.sidebarOpened })}>
                                 <button
                                     className="navbar-toggler"
                                     type="button"
                                     onClick={this.props.toggleSidebar}
                                 >
-                                    <span className="navbar-toggler-bar bar1"/>
-                                    <span className="navbar-toggler-bar bar2"/>
-                                    <span className="navbar-toggler-bar bar3"/>
+                                    <span className="navbar-toggler-bar bar1" />
+                                    <span className="navbar-toggler-bar bar2" />
+                                    <span className="navbar-toggler-bar bar3" />
                                 </button>
                             </div>
-                            <NavbarBrand href="#pablo" onClick={e => e.preventDefault()}>
-                                {this.props.brandText}
-                            </NavbarBrand>
                         </div>
                         <Collapse navbar isOpen={this.state.collapseOpen}>
                             <Nav className="ml-auto" navbar>
@@ -91,13 +92,12 @@ class AdminNavbar extends React.Component {
                                         nav
                                         onClick={e => e.preventDefault()}
                                     >
-                                        <div className="fas fa-cogs fa-2x"/>
-                                        <b className="caret d-none d-lg-block d-xl-block"/>
+                                        <div className="fas fa-cogs fa-2x" />
+                                        <b className="caret d-none d-lg-block d-xl-block" />
                                     </DropdownToggle>
                                     <DropdownMenu className="dropdown-navbar" right tag="ul">
                                         <NavLink tag="li">
-                                            <DropdownItem><i className="fas fa-sign-out-alt"></i>Log out
-                                            </DropdownItem>
+                                            <DropdownItem onClick={this.handleLogout}><i className="fas fa-sign-out-alt"></i>Log out</DropdownItem>
                                         </NavLink>
                                         <NavLink tag="li">
                                             <DropdownItem toggle={false} onClick={this.toggleMode} className="nav-item">
@@ -110,7 +110,7 @@ class AdminNavbar extends React.Component {
                                         </NavLink>
                                     </DropdownMenu>
                                 </UncontrolledDropdown>
-                                <li className="separator d-lg-none"/>
+                                <li className="separator d-lg-none" />
                             </Nav>
                         </Collapse>
                     </Container>
@@ -121,7 +121,7 @@ class AdminNavbar extends React.Component {
                     toggle={this.toggleModalSearch}
                 >
                     <div className="modal-header">
-                        <Input id="inlineFormInputGroup" placeholder="SEARCH" type="text"/>
+                        <Input id="inlineFormInputGroup" placeholder="SEARCH" type="text" />
                         <button
                             aria-label="Close"
                             className="close"
@@ -129,13 +129,13 @@ class AdminNavbar extends React.Component {
                             type="button"
                             onClick={this.toggleModalSearch}
                         >
-                            <i className="tim-icons icon-simple-remove"/>
+                            <i className="tim-icons icon-simple-remove" />
                         </button>
                     </div>
                 </Modal>
             </>
-        );
-    }
+        )
+    };
 }
 
-export default AdminNavbar;
+export default withRouter(AdminNavbar);

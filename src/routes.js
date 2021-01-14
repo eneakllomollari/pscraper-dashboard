@@ -1,6 +1,6 @@
-import Dashboard from "views/Dashboard.jsx";
-import DynamicHistory from "views/DynamicHistory.jsx";
-import Map from "views/Map.jsx";
+import Dashboard from "./views/Dashboard.jsx";
+import DynamicHistory from "./views/DynamicHistory.jsx";
+import Map from "./views/Map.jsx";
 
 const routes = [{
         path: "/dashboard",
@@ -18,7 +18,7 @@ const routes = [{
     },
     {
         path: "/dynamic-history",
-        name:    "History",
+        name: "History",
         icon: "fas fa-history",
         component: DynamicHistory,
         layout: "/admin"
