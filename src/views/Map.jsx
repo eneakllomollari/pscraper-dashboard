@@ -1,106 +1,121 @@
 import React from "react";
-import { GoogleMap, Marker, withGoogleMap, withScriptjs } from "react-google-maps";
-import { Card, CardBody, CardHeader, Col, Row, Table } from "reactstrap"
-import { headers, sellers_api } from "variables/charts.jsx"
+import {headers, sellers_paginate_api} from "variables/charts.jsx"
 import axios from "axios";
-import { css } from "@emotion/core";
-import { MoonLoader } from "react-spinners"
+import {Card, CardBody, CardFooter, CardHeader, Col, Row, Table} from "reactstrap";
+import {css} from "@emotion/core";
+import {MoonLoader} from "react-spinners"
+import ReactPaginate from 'react-paginate';
 
-const MapWrapper = withScriptjs(
-    withGoogleMap(props => (
-        <GoogleMap
-            defaultZoom={5}
-            defaultCenter={{ lat: 38.9947059, lng: -106.6715692 }}
-        >{
-                props.sellers.map(seller => {
-                    const onClick = props.onClick.bind(this, seller.name);
-                    return <Marker
-                        position={{ lat: seller.latitude, lng: seller.longitude }}
-                        onClick={onClick}
-                    />
-                })
-            }
-        </GoogleMap>
-    ))
-);
 
-class Map extends React.Component {
-    constructor() {
-        super();
-        this.state = { selectedSeller: false, sellers: '' }
+export default class MyMap extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            perPage: 100,
+            pageCount: '',
+            sellers: '',
+            next: '',
+            prev: '',
+        }
     }
 
-    handleClick = (seller, event) => {
-        this.setState({ selectedSeller: seller })
-    };
+    handlePageChange = (data) => {
+        const url = `${sellers_paginate_api}?limit=${this.state.perPage}&offset=${data.selected * this.state.perPage}`
+        axios.get(url, headers).then(resp => {
+            const sellers = resp.data.results;
+            this.setState({sellers});
+        })
+    }
 
     componentDidMount() {
-        axios.get(sellers_api, headers).then(resp => {
-            const sellers = resp.data;
-            this.setState({ sellers });
+        axios.get(sellers_paginate_api, headers).then(resp => {
+            const sellers = resp.data.results;
+            const pageCount = Math.ceil(resp.data.count / this.state.perPage)
+            this.setState({sellers, pageCount});
         })
     }
 
     render() {
-        return (
-            <div className="content">
-                {typeof this.state.sellers === 'string' ?
+        return (<div className="content">
+                {this.state.sellers === '' ?
                     <MoonLoader
                         css={css`margin: 10% auto;`}
                         size={150}
                         color="#123abc"
                     /> :
-                    <Col>
+                    <div>
                         <Row>
-                            <Card>
-                                <CardHeader>Dealers Map</CardHeader>
-                                <CardBody>
-                                    <div id="map" className="map" style={{ position: "relative", overflow: "hidden" }}>
-                                        <MapWrapper
-                                            sellers={this.state.sellers}
-                                            selectedSeller={this.state.selectedSeller}
-                                            onClick={this.handleClick}
-                                            googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyB_CpXJHBVmSqzpbFQ3pMlOJV1VMmPql2E"
-                                            loadingElement={<div style={{ height: `100%` }} />}
-                                            containerElement={<div style={{ height: `100%` }} />}
-                                            mapElement={<div style={{ height: `100%` }} />}
-                                        />
-                                    </div>
-                                </CardBody>
-                            </Card>
+                            <Col>
+                                <Card>
+                                    <CardHeader>Dealers Map</CardHeader>
+                                    <CardBody>
+                                        <div id="map">
+                                            Leaflet here
+                                        </div>
+                                    </CardBody>
+                                </Card>
+                            </Col>
                         </Row>
                         <Row>
-                            <Card>
-                                <CardHeader>Dealers Table</CardHeader>
-                                <CardBody>
-                                    <Table className="tablesorter table" responsive hover>
-                                        <thead className="text-primary">
+                            <Col>
+                                <Card>
+                                    <CardHeader>Dealers Table</CardHeader>
+                                    <CardFooter>
+                                        <ReactPaginate
+                                            previousLabel={'Prev'}
+                                            nextLabel={'Next'}
+                                            breakLabel={'...'}
+                                            pageCount={this.state.pageCount}
+                                            onPageChange={this.handlePageChange}
+                                            containerClassName={'pagination pointerMouse'}
+                                            subContainerClassName={'pagination'}
+                                            nextLinkClassName={'pointerMouse'}
+                                            prevLinkClassName={'pointerMouse'}
+                                        />
+                                    </CardFooter>
+                                    <CardBody>
+                                        <Table className="tablesorter table" responsive hover>
+                                            <thead className="text-primary">
                                             <tr>
+                                                <th>#</th>
                                                 <th>Dealer</th>
                                                 <th>Phone Number</th>
                                                 <th>Address</th>
                                             </tr>
-                                        </thead>
-                                        <tbody>
+                                            </thead>
+                                            <tbody>
                                             {
                                                 this.state.sellers.map(seller =>
                                                     <tr>
+                                                        <td>{seller.id}</td>
                                                         <td>{seller.name}</td>
                                                         <td>{seller.phone_number} </td>
                                                         <td>{seller.address} </td>
                                                     </tr>
                                                 )
                                             }
-                                        </tbody>
-                                    </Table>
-                                </CardBody>
-                            </Card>
+                                            </tbody>
+                                        </Table>
+                                    </CardBody>
+                                    <CardFooter>
+                                        <ReactPaginate
+                                            previousLabel={'Prev'}
+                                            nextLabel={'Next'}
+                                            breakLabel={'...'}
+                                            pageCount={this.state.pageCount}
+                                            onPageChange={this.handlePageChange}
+                                            containerClassName={'pagination pointerMouse'}
+                                            subContainerClassName={'pagination'}
+                                            nextLinkClassName={'pointerMouse'}
+                                            prevLinkClassName={'pointerMouse'}
+                                        />
+                                    </CardFooter>
+                                </Card>
+                            </Col>
                         </Row>
-                    </Col>
+                    </div>
                 }
             </div>
         );
     }
 }
-
-export default Map;

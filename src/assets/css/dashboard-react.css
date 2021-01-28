@@ -18544,3 +18544,19 @@ textarea.form-control {
     padding-left: 0;
     padding-right: 0;
 }
+
+.pagination > li > a,
+.pagination > li > span {
+    position: relative;
+    float: left;
+    padding: 6px 12px;
+    line-height: 1.42857143;
+    text-decoration: none;
+    color: inherit;
+    border: 1px solid;
+    margin-left: -1px;
+}
+
+.pointerMouse {
+    cursor: pointer;
+}
